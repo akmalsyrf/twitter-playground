@@ -14,4 +14,15 @@ const bearer = new TwitterApi(BEARER_TOKEN)
 const twitterClient = client.readWrite
 const twitterBearer = bearer.readOnly
 
-module.exports = { twitterClient, twitterBearer }
+const tweet = async () => {
+    try {
+        // await twitterClient.v2.tweet('Hello world')
+
+        const following = await twitterClient.v2.listFollowers()
+        console.log('following ', following)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+tweet()
