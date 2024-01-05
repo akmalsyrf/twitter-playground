@@ -17,7 +17,6 @@ const twitterBearer = bearer.readOnly
 const tweet = async () => {
     try {
         // await twitterClient.v2.tweet('Hello world')
-
         const following = await twitterClient.v2.listFollowers()
         console.log('following ', following)
     } catch (error) {

@@ -9,7 +9,7 @@ const authClient = new auth.OAuth2User({
   client_id: process.env.CLIENT_ID,
   client_secret: process.env.CLIENT_SECRET,
   callback: "http://127.0.0.1:3000/callback",
-  scopes: ["tweet.read", "users.read"],
+  scopes: ["tweet.read", "users.read", "offline.access", "tweet.write"],
 });
 
 const client = new Client(authClient);
@@ -36,8 +36,18 @@ app.get("/login", async function (req, res) {
 });
 
 app.get("/tweets", async function (req, res) {
-  const tweets = await client.tweets.findTweetById("20");
-  res.send(tweets.data);
+  try {
+    // const tweets = await client.tweets.createTweet({ text: "Hello world" });
+    const tweets = await client.tweets.findTweetById("20");
+    res.send(tweets.data);
+  } catch (error) {
+    console.error("Error fetching tweets:", error);
+    if (error.error) {
+      console.error("Twitter API Error:", error.error);
+    }
+
+    res.status(500).send("Error fetching tweets");
+  }
 });
 
 app.get("/revoke", async function (req, res) {
