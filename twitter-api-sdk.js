@@ -5,11 +5,13 @@ require('dotenv').config();
 
 const app = express();
 
+const OAuth2Scopes = ["tweet.read" , "tweet.write" , "tweet.moderate.write" , "users.read" , "follows.read" , "follows.write" , "offline.access" , "space.read" , "mute.read" , "mute.write" , "like.read" , "like.write" , "list.read" , "list.write" , "block.read" , "block.write" , "bookmark.read" , "bookmark.write"]
+
 const authClient = new auth.OAuth2User({
   client_id: process.env.CLIENT_ID,
   client_secret: process.env.CLIENT_SECRET,
   callback: "http://127.0.0.1:3000/callback",
-  scopes: ["tweet.read", "users.read", "offline.access", "tweet.write"],
+  scopes: OAuth2Scopes,
 });
 
 const client = new Client(authClient);
@@ -38,7 +40,7 @@ app.get("/login", async function (req, res) {
 app.get("/tweets", async function (req, res) {
   try {
     // const tweets = await client.tweets.createTweet({ text: "Hello world" });
-    const tweets = await client.tweets.findTweetById("20");
+    const tweets = await client.users.findUserByUsername("TwitterDev")
     res.send(tweets.data);
   } catch (error) {
     console.error("Error fetching tweets:", error);
